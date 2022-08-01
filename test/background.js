@@ -33,3 +33,38 @@ function isLogedIn(sendResponse) {
     }
   });
 }
+
+async function getAuth(userInfo, sendResponse) {
+  const params = {
+    email: userInfo.email,
+    password: userInfo.pwd,
+  };
+  const response = await fetch("yourUrl", {
+    method: "POST",
+    body: JSON.stringify(params),
+    headers: { "Content-Type": "application/json" },
+  });
+  if (response.status !== 200) {
+    sendResponse("fail");
+  } else {
+    const result = await response.json();
+    chrome.storage.local.set(
+      {
+        userStatus: result.userStatus,
+      },
+      (res) => {
+        if (chrome.runtime.lastError) sendResponse("fail");
+        sendResponse("success");
+      }
+    );
+  }
+}
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.message === "userStatus") {
+    isLogedIn(sendResponse);
+    return true;
+  } else if (request.message === "login") {
+    getAuth(request.payload, sendResponse);
+    return true;
+  }
+});
