@@ -1,0 +1,22 @@
+{
+    "name": "First Extension",
+    "description": "My first Chrome Extension!",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_title": "Hello world",
+        "default_popup": "popup.html",
+        "default_icon": "favicon.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "scripting",
+        "cookies",
+        "declarativeContent",
+        "storage"
+    ]
+}
